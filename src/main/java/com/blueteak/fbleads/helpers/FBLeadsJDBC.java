@@ -4,17 +4,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.blueteak.fblead.request.FBLeadRequest;
 import com.blueteak.fbleads.constants.FbExtractConstants;
-import com.blueteak.fbleads.constants.FbExtractConstants.SelectQueryConstants;
+import com.blueteak.fbleads.constants.FbExtractConstants.QueryConstants;
 
 public class FBLeadsJDBC {
 
-	public void isFBLeadExists(List<FBLeadRequest> fbLeadReqList) throws Exception {
+	public List<FBLeadRequest> isFBLeadExists(List<FBLeadRequest> fbLeadReqList) throws Exception {
 		Connection connection = null;
 		Statement selectStmt = null;
+		List<FBLeadRequest> newfbLeadReqList = new ArrayList<>();
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			connection = DriverManager.getConnection(FbExtractConstants.DB_URL, FbExtractConstants.USER, FbExtractConstants.PASS);
@@ -24,20 +26,21 @@ public class FBLeadsJDBC {
 				FBLeadRequest fbLeadReq = fbLeadReqList.get(i);
 				System.out.println("Count :: " + count++);
 				String selectQuery = String.format(FbExtractConstants.FB_SELECT_QUERY,
-						SelectQueryConstants.CREATED_DATE, 
+						fbLeadReq.getCreatedDateTime(), 
 						fbLeadReq.getCustomerFullName(), 
 						fbLeadReq.getEmail(),
 						fbLeadReq.getModel(), 
 						fbLeadReq.getPhoneNumber(), 
-						SelectQueryConstants.SRC);
+						QueryConstants.SRC);
 				selectStmt = connection.createStatement();
 				ResultSet rs = selectStmt.executeQuery(selectQuery);
 				
 				if (rs.next()) {
 					// present
-					fbLeadReqList.remove(i);
+					//newfbLeadReqList.add(fbLeadReq);
 				} else {
 					// not present
+					newfbLeadReqList.add(fbLeadReq);
 					isNotPresent++;
 				}
 			} 
@@ -52,5 +55,6 @@ public class FBLeadsJDBC {
 				e.printStackTrace();
 			}
 		}
+		return newfbLeadReqList;
 	}
 }

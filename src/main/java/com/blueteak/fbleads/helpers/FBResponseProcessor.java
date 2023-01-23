@@ -3,15 +3,11 @@ package com.blueteak.fbleads.helpers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import com.blueteak.fblead.request.FBLeadRequest;
 import com.blueteak.fbleads.constants.FbExtractConstants;
-import com.blueteak.fbleads.constants.FbExtractConstants.FilterResponseConstants;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -33,11 +29,11 @@ public class FBResponseProcessor {
 			int count = 0;
 			for (FBLeadRequest fbLeadReq : fbLeadReqList) {
 				System.out.println("Count :: " + count++);
-				Date createdDate = DateUtil.getDate(fbLeadReq.getCreatedDateTime());
-				Date afterDate = DateUtil.genAfterDate();
-				Date beforeDate = DateUtil.genBeforeDate();
+//				Date createdDate = DateUtil.getDate(fbLeadReq.getCreatedDateTime());
+//				Date afterDate = DateUtil.genAfterDate();
+//				Date beforeDate = DateUtil.genBeforeDate();
 				String processedJson = "";
-				if (createdDate.after(afterDate) && createdDate.before(beforeDate)) {
+				//if (createdDate.after(afterDate) && createdDate.before(beforeDate)) {
 					if (FbExtractConstants.IS_SYNC_RES) {
 						processedJson = generateSyncResponse(objMapper, fbLeadReq);
 					} else {
@@ -45,7 +41,7 @@ public class FBResponseProcessor {
 					}
 					System.out.println(processedJson);
 					fileWriter.write(processedJson + "  \n");
-				}
+				//}
 			}
 		} finally {
 			fileWriter.close();

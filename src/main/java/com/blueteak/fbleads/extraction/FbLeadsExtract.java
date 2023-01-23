@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.blueteak.csvutil.CSVReader;
+import com.blueteak.csvutil.CSVWriter;
 import com.blueteak.fblead.request.FBLeadRequest;
 import com.blueteak.fbleads.constants.FbExtractConstants;
 import com.blueteak.fbleads.helpers.FBLeadsJDBC;
@@ -36,9 +37,15 @@ public class FbLeadsExtract {
 		fbLeadsExtract.fbLeadsHelper.readFiles(fbLeadsExtract.csvReader, fbLeadReqList);
 		System.out.println("################### File Read done ######################");
 		
-		// check if existing in DB
-		fbLeadsExtract.fbLeadsJDBC.isFBLeadExists(fbLeadReqList);
+//		// check if existing in DB
+		fbLeadReqList = fbLeadsExtract.fbLeadsJDBC.isFBLeadExists(fbLeadReqList);
 		System.out.println("################### JDBC Check done ######################");
+		
+		CSVWriter csvWriter = new CSVWriter(fbLeadReqList);
+		String genCSVFileName = FbExtractConstants.COMBINED_CSV_LOCATION + "/" + FbExtractConstants.COMBINED_CSV_FILENAME + java.time.LocalDate.now() + "-"
+				+ fbLeadsExtract.fbLeadsHelper.getRandomNumberString() + ".csv";
+		csvWriter.writeCSV(genCSVFileName);
+	
 		
 		// generate log file
 		String genFileName = FbExtractConstants.EXTRACTION_LOCATION + "/" + FbExtractConstants.EXTRACTED_FILENAME + java.time.LocalDate.now() + "-"

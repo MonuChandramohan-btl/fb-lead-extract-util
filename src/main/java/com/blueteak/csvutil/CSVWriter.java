@@ -15,11 +15,9 @@ public class CSVWriter{
 
 
 	static volatile boolean isHeadedAdded = false;
-	private String writeCsvFilename = null;
 	private List<FBLeadRequest> fbLeadReqList = new ArrayList<>();
 
-	public CSVWriter(String writeCsvFilename, List<FBLeadRequest> fbLeadReqList) {
-		this.writeCsvFilename = writeCsvFilename;
+	public CSVWriter( List<FBLeadRequest> fbLeadReqList) {
 		this.fbLeadReqList = fbLeadReqList;
 	}
 	
@@ -28,11 +26,11 @@ public class CSVWriter{
 	 * @param leadResList
 	 * 
 	 */
-	public void writeCSV() {
+	public void writeCSV(String writeCsvFilename ) {
 		System.out.println("Started writing csv..");
 		ICsvBeanWriter beanWriter = null;
 		try {
-			beanWriter = new CsvBeanWriter(new FileWriter(CSVUtil.getAbsPath() +"/Recovered_"+  writeCsvFilename, isHeadedAdded),
+			beanWriter = new CsvBeanWriter(new FileWriter(writeCsvFilename, isHeadedAdded),
 					CsvPreference.STANDARD_PREFERENCE);
 			final String[] header = new String[] {  "LEADID", "CREATEDDATETIME", "MODEL", "QUESTION1",
 					"QUESTION2", "CUSTOMERFULLNAME" ,"EMAIL","PHONENUMBER"};

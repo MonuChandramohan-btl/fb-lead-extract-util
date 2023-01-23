@@ -9,6 +9,8 @@ import java.util.List;
 
 import com.blueteak.fblead.request.FBLeadRequest;
 import com.blueteak.fbleads.constants.FbExtractConstants;
+import com.blueteak.fbleads.constants.FbExtractConstants.QueryConstants;
+import com.blueteak.fbleads.constants.FbExtractConstants.UpdateQueryConstants;
 
 public class FBUpdateScriptProcessResponse {
 
@@ -26,17 +28,19 @@ public class FBUpdateScriptProcessResponse {
 			int count = 0;
 			for (FBLeadRequest fbLeadReq : fbLeadReqList) {
 				System.out.println("Count :: " + count++);
-				Date createdDate = DateUtil.getDate(fbLeadReq.getCreatedDateTime());
-				Date afterDate = DateUtil.genAfterDate();
-				Date beforeDate = DateUtil.genBeforeDate();
-				if (createdDate.after(afterDate) && createdDate.before(beforeDate)) {
+//				Date createdDate = DateUtil.getDate(fbLeadReq.getCreatedDateTime());
+//				Date afterDate = DateUtil.genAfterDate();
+//				Date beforeDate = DateUtil.genBeforeDate();
+//				if (createdDate.after(afterDate) && createdDate.before(beforeDate)) {
 					String updateQuery = String.format(FbExtractConstants.FB_UPDATE_QUERY,
-							fbLeadReq.getCreatedDateTime(), fbLeadReq.getCustomerFullName(), fbLeadReq.getEmail(),
-							fbLeadReq.getModel(), fbLeadReq.getPhoneNumber());
+							fbLeadReq.getCreatedDateTime(), UpdateQueryConstants.EXECUTED_DATE ,
+							fbLeadReq.getCustomerFullName(), fbLeadReq.getEmail(),
+							fbLeadReq.getModel(), fbLeadReq.getPhoneNumber(),
+							QueryConstants.SRC);
 					fileWriter.write(updateQuery + "  \n");
 				}
 
-			}
+//			}
 		} finally {
 			fileWriter.close();
 		}
